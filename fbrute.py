@@ -91,6 +91,8 @@ def run(email, wordlist, agent, timeout):
 			print ("\033[0m")
 			raise SystemExit
 
+	msg = "password valid tidak ditemukan di wordlist anda: " + wordlist.name; logger.critical(msg)
+
 def main():
 	print (BANNER)
 	parser = optparse.OptionParser(version=__version__+"#dev")
@@ -101,11 +103,7 @@ def main():
 		parser.add_option("--user-agent", dest="agent", metavar="<agent>", help="HTTP user-agent header value (default: \"Mozilla 0.5\")", default="Mozilla 0.5")
 
 		(args, _) = parser.parse_args()
-		help_opt = parser.get_option("-h")
-		help_opt.help = help_opt.help.capitalize()
-		vers_opt = parser.get_option("--version")
-		vers_opt.help = vers_opt.help.capitalize()
-		
+
 		if not args.accountTarget:
 			parser.error("try '-h' for more information")
 	except (optparse.OptionError, TypeError) as e:
@@ -119,7 +117,7 @@ def main():
 
 			run(args.accountTarget, args.wordList, args.agent, args.timeout)
 		except Exception as msg:
-			logger.exception(msg)
+			logger.error(msg)
 
 		except SystemExit:
 			pass
