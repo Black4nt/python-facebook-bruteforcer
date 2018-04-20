@@ -9,7 +9,7 @@ Date: 10.07 20/04/2018
 
 # Screenshot
 
-![FBrute](link)
+![FBrute](https://github.com/Black4nt/python-facebook-bruteforcer/blob/master/Screenshot/FBrute.png)
 
 
 # Disclaimer
